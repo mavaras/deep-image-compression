@@ -1,18 +1,38 @@
 # Standard libraries
 from argparse import ArgumentParser
+import pathlib
 from typing import Optional
 
 # Third party libraries
 import tensorflow as tf
+from tensorflow.data import Dataset
 from tensorflow.keras.losses import MSE
 from tensorflow.keras.metrics import Mean
 
 # Local libraries
 from model.cae import CAE
+from utils import load_image
+
+
+def make_dataset_unbatched():
+    images_ds = list_ds.map(load_image, num_parallel_calls=1)
+    images_ds = images_ds.repeat(10)
+
+    return images_ds
+
+
+def get_dataset(dataset_path: str) -> Dataset:
+    datasetPath = pathlib.Path(dataset_path)
+    list_ds = tf.data.Dataset.list_files(str(datasetPath/'*'))
+    num_elements = tf.data.experimental.cardinality(list_ds).numpy()
+    dataset = make_dataset_unbatched().batch(32, drop_remainder=True)
+
+    return dataset
 
 
 def train(
     model: CAE,
+    dataset,
     output_path: str,
     epochs: Optional[int],
     image_width: int,
@@ -68,19 +88,13 @@ if __name__ == '__main__':
         default='trained_models/',
         type=str
     )
+    parser.add_argument(
+        '--dataset-path',
+        required=False,
+        default='dataset/',
+        type=str
+    )
     parser.add_argument('--epochs', required=False, default=None, type=int)
-    parser.add_argument(
-        '--image-width',
-        required=False,
-        default=1280,
-        type=int
-    )
-    parser.add_argument(
-        '--image-height',
-        required=False,
-        default=720,
-        type=int
-    )
     parser.add_argument('--log-freq', required=False, default=5, type=int)
     parser.add_argument('--save-freq', required=False, default=15, type=int)
     args = parser.parse_args()
@@ -88,11 +102,12 @@ if __name__ == '__main__':
     model = CAE()
     train(
         model,
+        dataset=get_dataset(args.dataset_path),
         output_path=args.output_path,
-        image_height=args.image_height,
-        image_width=args.image_width,
+        image_height=720,
+        image_width=1280,
         log_freq=args.log_freq,
         save_freq=args.save_freq,
-        epochs=epochs
+        epochs=args.epochs
     )
     
