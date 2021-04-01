@@ -20,7 +20,13 @@ python3 src/test.py \
   --image-path test.bmp
 ```
 ## Results
-incoming...
+
+| Original             |  Result |
+:-------------------------:|:-------------------------:
+2.8 MB ![](imgs/test.bmp) | 1.2 MB ![](imgs/pred_image.png)
+631 KB ![](imgs/me.bmp) | 21 KB ![](imgs/me_pred.jpg)
+787 KB ![](imgs/city.bmp) | 38 KB ![](imgs/city_pred.jpg)
+
 ## References
 - [1] [DeepZip: Lossless Compression using Recurrent Networks](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1174/reports/2761006.pdf)
 - [2] [Lossy Image Compression with Compressive Autoencoders, Theis et al.](https://arxiv.org/abs/1703.00395)
