@@ -9,7 +9,7 @@ import tensorflow as tf
 def load_image(file_path: str) -> Image:
     parts = tf.strings.split(file_path, "\\")
     image = tf.io.read_file(file_path)
-    image = tf.image.decode_bmp(image, channels=3)
+    image = tf.image.decode_image(image, channels=3)
     image = tf.image.convert_image_dtype(image, tf.float32)
 
     return image
