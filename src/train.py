@@ -38,7 +38,7 @@ def train(
     image_width: int,
     image_height: int,
     log_freq: int,
-    save_freq: int
+    save_freq: int,
 ) -> None:
     @tf.function
     def train_step(image):
@@ -86,13 +86,13 @@ if __name__ == '__main__':
         '--output-path',
         required=False,
         default='trained_models/',
-        type=str
+        type=str,
     )
     parser.add_argument(
         '--dataset-path',
         required=False,
         default='dataset/',
-        type=str
+        type=str,
     )
     parser.add_argument('--epochs', required=False, default=None, type=int)
     parser.add_argument('--log-freq', required=False, default=5, type=int)
@@ -108,6 +108,6 @@ if __name__ == '__main__':
         image_width=1280,
         log_freq=args.log_freq,
         save_freq=args.save_freq,
-        epochs=args.epochs
+        epochs=args.epochs,
     )
     

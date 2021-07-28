@@ -7,14 +7,14 @@ from PIL import Image
 import tensorflow as tf
 from tensorflow.train import (
     Checkpoint,
-    latest_checkpoint
+    latest_checkpoint,
 )
 
 # Local libraries
 from model.cae import CAE
 from utils import (
     load_image,
-    parse_np_array_image
+    parse_np_array_image,
 )
 
 
@@ -34,8 +34,8 @@ if __name__ == '__main__':
     parser.add_argument(
         '--image-output-path',
         required=False,
-        default='pred_image.png',
-        type=str
+        default='pred_image.jpg',
+        type=str,
     )
     args = parser.parse_args()
 
