@@ -14,7 +14,7 @@ from model.cae import CAE
 from utils import load_image
 
 
-def make_dataset_unbatched():
+def make_dataset_unbatched(list_ds):
     images_ds = list_ds.map(load_image, num_parallel_calls=1)
     images_ds = images_ds.repeat(10)
 
@@ -25,7 +25,7 @@ def get_dataset(dataset_path: str) -> Dataset:
     datasetPath = pathlib.Path(dataset_path)
     list_ds = tf.data.Dataset.list_files(str(datasetPath/'*'))
     num_elements = tf.data.experimental.cardinality(list_ds).numpy()
-    dataset = make_dataset_unbatched().batch(32, drop_remainder=True)
+    dataset = make_dataset_unbatched(list_ds).batch(32, drop_remainder=True)
 
     return dataset
 
@@ -59,8 +59,8 @@ def train(
     section_size = 128
     for step, train_image in enumerate(dataset):
         train_image = train_image.numpy()
-        for c in range(image_height / section_size):
-            for j in range(image_width / section_size):
+        for c in range(image_height // section_size):
+            for j in range(image_width // section_size):
                 cc = section_size * c
                 jj = section_size * j
                 train_image_batch = train_image[:, cc : cc + section_size, jj : jj + section_size, :]
